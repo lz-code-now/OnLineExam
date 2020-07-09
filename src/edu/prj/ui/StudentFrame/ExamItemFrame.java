@@ -60,6 +60,7 @@ public class ExamItemFrame extends JFrame {
             String itemE = model.getValueAt(index,7).toString();
             String itemF = model.getValueAt(index,8).toString();
             String answer = model.getValueAt(index,10).toString();
+            System.out.println("1");
             question = new Question();
             examItem = new ExamItem();
             question.setQuestionID(questionID);

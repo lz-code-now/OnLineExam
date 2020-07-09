@@ -112,7 +112,7 @@ public class PaperFrame extends JFrame {
                 if (paper.getStartOn().getTime() < System.currentTimeMillis() - 1000*60*60*24){
                     JOptionPane.showMessageDialog(null,"开始时间必须在创建时间之后");
                 } else {
-                    if ( paper.getStartOn().getTime() - 1000*60*60*24 > paper.getEndOn().getTime()){
+                    if ( paper.getStartOn().getTime() > paper.getEndOn().getTime()){
                         JOptionPane.showMessageDialog(null,"开始时间必须在结束时间之前");
                     } else {
                         if (paperService.update(paper) > 0){

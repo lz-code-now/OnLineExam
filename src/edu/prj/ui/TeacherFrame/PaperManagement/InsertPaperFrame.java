@@ -78,7 +78,7 @@ public class InsertPaperFrame extends JFrame {
             paperItemService.delete(paper.getPaperID());
             JOptionPane.showMessageDialog(null,"开始时间必须在创建时间之后");
         } else {
-            if ( Date.valueOf(startOn.getText()).getTime() - 1000*60*60*24 > Date.valueOf(endOn.getText()).getTime()){
+            if ( Date.valueOf(startOn.getText()).getTime()  > Date.valueOf(endOn.getText()).getTime()){
                 paperItemService.delete(paper.getPaperID());
                 JOptionPane.showMessageDialog(null,"开始时间必须在结束时间之前");
             } else {
