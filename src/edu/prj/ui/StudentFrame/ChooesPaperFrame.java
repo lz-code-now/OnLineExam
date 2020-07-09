@@ -114,7 +114,7 @@ public class ChooesPaperFrame extends JFrame {
         Paper paper = getRowData();
         paperID1 = paper.getPaperID();
         if (paper != null){
-            if (paper.getStartOn().getTime()- 1000*60*60*24 <= System.currentTimeMillis()  && paper.getEndOn().getTime() >= System.currentTimeMillis() - 1000*60*60*24){
+            if (paper.getStartOn().getTime() <= System.currentTimeMillis()  && paper.getEndOn().getTime() >= System.currentTimeMillis() - 1000*60*60*24){
                 Exam exam = new Exam();
                 exam.setStudentID(studentService.queryByLoginName(LoginFrame.loginName).getStudentID());
                 exam.setPaperID(paper.getPaperID());

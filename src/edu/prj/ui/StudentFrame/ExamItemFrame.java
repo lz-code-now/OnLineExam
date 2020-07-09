@@ -60,7 +60,6 @@ public class ExamItemFrame extends JFrame {
             String itemE = model.getValueAt(index,7).toString();
             String itemF = model.getValueAt(index,8).toString();
             String answer = model.getValueAt(index,10).toString();
-            System.out.println("1");
             question = new Question();
             examItem = new ExamItem();
             question.setQuestionID(questionID);
@@ -161,6 +160,12 @@ public class ExamItemFrame extends JFrame {
     }
 
     private void submitPaperActionPerformed(ActionEvent e) {
+        examItems = new ArrayList<>();
+        examItems = examItemService.queryByExamID(ChooesPaperFrame.examID);
+        examItems.get(i).setStuAnswer(textField1.getText().trim());
+        for (ExamItem item:examItems){
+            examItemService.update(item);
+        }
         dispose();
     }
 
@@ -172,6 +177,14 @@ public class ExamItemFrame extends JFrame {
         }
         examItems = examItemService.queryByExamID(ChooesPaperFrame.examID);
         if (i > 0){
+            examItems.get(i).setStuAnswer(textField1.getText().trim());
+            examItemService.update(examItems.get(i));
+            if (examItems.get(i-1).getStuAnswer().length() > 0){
+                textField1.setText(examItems.get(i-1).getStuAnswer());
+            } else {
+                textField1.setText("");
+            }
+            showListData();
             i--;
         } else {
             JOptionPane.showMessageDialog(null,"已经是第一题了");
@@ -194,7 +207,17 @@ public class ExamItemFrame extends JFrame {
             questions.add(questionService.queryByQuestionID(paperItem.getQuestionID()));
         }
         examItems = examItemService.queryByExamID(ChooesPaperFrame.examID);
-        if (i < questions.size()){
+        System.out.println(questions.size());
+        System.out.println(i);
+        if (i < questions.size()-1){
+            examItems.get(i).setStuAnswer(textField1.getText().trim());
+            examItemService.update(examItems.get(i));
+            if (examItems.get(i+1).getStuAnswer().length() > 0){
+                textField1.setText(examItems.get(i+1).getStuAnswer());
+            } else {
+                textField1.setText("");
+            }
+            showListData();
             i++;
         } else {
             JOptionPane.showMessageDialog(null,"已经是最后一题了");
@@ -283,6 +306,24 @@ public class ExamItemFrame extends JFrame {
         pack();
         setLocationRelativeTo(getOwner());
         // JFormDesigner - End of component initialization  //GEN-END:initComponents
+        new Thread(){
+            Long s = paperService.queryByPaperId(ChooesPaperFrame.paperID1).getExamMinute();
+            int time = Integer.parseInt(s.toString())*60;
+            @Override
+            public void run() {
+                for (int j = time; j >= s; j--) {
+                    String s1 = j/60 + "分" + j%60 + "秒";
+                    label2.setText(s1);
+                    try {
+                        sleep(1000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+                JOptionPane.showMessageDialog(null,"考试时间已到");
+                dispose();
+            }
+        }.start();
         showListData();
         List<Question> questions = new ArrayList<>();
         for (PaperItem paperItem:paperItemService.queryByPaperID(ChooesPaperFrame.paperID1)) {
